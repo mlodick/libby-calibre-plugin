@@ -1,6 +1,7 @@
 # Changelog
 
-Unreleased
+Version 0.1.10
+- Fix: Parsing datetimes with timezone not specified
 - New: Rename a card
 - Fix: Use a regex validator instead of input mask for Libby setup code due to wonkiness, ref #14
 
