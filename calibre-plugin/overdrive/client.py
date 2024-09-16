@@ -11,6 +11,7 @@
 import gzip
 import json
 import logging
+import ssl
 from dataclasses import dataclass, field
 from http.client import HTTPException
 from io import BytesIO
@@ -19,7 +20,7 @@ from ssl import SSLError
 from typing import Dict, List, Optional, Union
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urljoin
-from urllib.request import Request, build_opener
+from urllib.request import Request, build_opener, HTTPSHandler
 
 from .common import pageable
 from .errors import ClientConnectionError
@@ -120,7 +121,10 @@ class OverDriveClient(object):
         self.max_retries = max_retries
         self.user_agent = kwargs.pop("user_agent", USER_AGENT)
         self.api_base = THUNDER_API_URL
-        self.opener = build_opener()
+        ssl_ctx = ssl.create_default_context()
+        ssl_ctx.check_hostname = False
+        ssl_ctx.verify_mode = ssl.CERT_NONE
+        self.opener = build_opener(HTTPSHandler(context=ssl_ctx))
 
     def default_headers(self) -> Dict:
         """

@@ -1,4 +1,6 @@
 # Changelog
+Version 0.1.11
+- Hack: don't verify SSL cert for overdrive URLs
 
 Version 0.1.10
 - Fix: Parsing datetimes with timezone not specified

@@ -11,6 +11,7 @@ import base64
 import gzip
 import json
 import logging
+import ssl
 import time
 import uuid
 from datetime import datetime, timezone
@@ -134,9 +135,13 @@ class LibbyClient(object):
         self.api_base = "https://sentry-read.svc.overdrive.com/"
         self.tags_api_base = "https://vandal.svc.overdrive.com/"
 
+        ssl_ctx = ssl.create_default_context()
+        ssl_ctx.check_hostname = False
+        ssl_ctx.verify_mode = ssl.CERT_NONE
         cookie_jar = CookieJar()
         handlers = [
             HTTPCookieProcessor(cookie_jar),
+            request.HTTPSHandler(context=ssl_ctx),
         ]
         self.opener = build_opener(*handlers)
         self.opener_noredirect = build_opener(NoRedirectHandler)
